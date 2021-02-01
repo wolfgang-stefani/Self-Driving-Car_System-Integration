@@ -5,8 +5,8 @@ Using ROS to program a self-driving car
 This project does not include a neural network traffic light detection. The traffic light detection is using simulator ground truth detected.
 
 ## ROS Structure
-Below is a descriptions of the ROS nodes.
-![stru](./readme_data/ros.png)
+Below is a description of the ROS nodes:
+![](/readme_data/ros-graph.png)
 
 ## Code/Repo Structure
 The code is contained entirely within the /ros/src/ directory. Within this directory, you will find the following ROS packages:
