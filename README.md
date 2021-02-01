@@ -38,6 +38,41 @@ In addition to these packages you will find the following. The styx and styx_msg
 * /ros/src/waypoint_follower/
   A package containing code from Autoware which subscribes to `/final_waypoints` and publishes target vehicle linear and angular velocities in the form of twist commands to the `/twist_cmd topic`.
   
+
+## Installation
+Please use **one** of the two installation options, either native **or** docker installation.
+
+### Native Installation
+
+* Be sure that your workstation is running Ubuntu 16.04 Xenial Xerus or Ubuntu 14.04 Trusty Tahir. [Ubuntu downloads can be found here](https://www.ubuntu.com/download/desktop).
+* If using a Virtual Machine to install Ubuntu, use the following configuration as minimum:
+  * 2 CPU
+  * 2 GB system memory
+  * 25 GB of free hard drive space
+
+  The Udacity provided virtual machine has ROS and Dataspeed DBW already installed, so you can skip the next two steps if you are using this.
+
+* Follow these instructions to install ROS
+  * [ROS Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu) if you have Ubuntu 16.04.
+  * [ROS Indigo](http://wiki.ros.org/indigo/Installation/Ubuntu) if you have Ubuntu 14.04.
+* Download the [Udacity Simulator](https://github.com/udacity/CarND-Capstone/releases).
+
+### Docker Installation
+[Install Docker](https://docs.docker.com/engine/installation/)
+
+Build the docker container
+```bash
+docker build . -t capstone
+```
+
+Run the docker file
+```bash
+docker run -p 4567:4567 -v $PWD:/capstone -v /tmp/log:/root/.ros/ --rm -it capstone
+```
+
+### Port Forwarding
+To set up port forwarding, please refer to the "uWebSocketIO Starter Guide" found in the classroom (see Extended Kalman Filter Project lesson).
+
 ## Usage
 
 1. Clone the project repository
@@ -75,3 +110,17 @@ cd CarND-Capstone/ros
 roslaunch launch/site.launch
 ```
 5. Confirm that traffic light detection works on real life images
+
+## Other library/driver information
+Outside of `requirements.txt`, here is information on other driver/library versions used in the simulator and Carla:
+
+Specific to these libraries, the simulator grader and Carla use the following:
+
+|        | Simulator | Carla  |
+| :-----------: |:-------------:| :-----:|
+| Nvidia driver | 384.130 | 384.130 |
+| CUDA | 8.0.61 | 8.0.61 |
+| cuDNN | 6.0.21 | 6.0.21 |
+| TensorRT | N/A | N/A |
+| OpenCV | 3.2.0-dev | 2.4.8 |
+| OpenMP | N/A | N/A |
