@@ -1,12 +1,15 @@
 # Self-Driving-Car_System-Integration
 Using ROS to program a self-driving car
 
-### Note
+## Note
 This project does not include a neural network traffic light detection. The traffic light detection is using simulator ground truth detected.
 
-## Code Structure
-![stru](./images/final-project-ros-graph-v2.png)
-Below is a brief overview of the repo structure, along with descriptions of the ROS nodes. The code is contained entirely within the /ros/src/ directory. Within this directory, you will find the following ROS packages:
+## ROS Structure
+Below is a descriptions of the ROS nodes.
+![stru](./readme_data/ros.png)
+
+## Code/Repo Structure
+The code is contained entirely within the /ros/src/ directory. Within this directory, you will find the following ROS packages:
 
 ### /ros/src/tl_detector/
 This package contains the traffic light detection node: tl_detector.py. This node takes in data from the `/image_color`, `/current_pose`, and `/base_waypoints` topics and publishes the locations to stop for red traffic lights to the `/traffic_waypoint` topic.
@@ -35,7 +38,7 @@ In addition to these packages you will find the following. The styx and styx_msg
 * /ros/src/waypoint_follower/
   A package containing code from Autoware which subscribes to `/final_waypoints` and publishes target vehicle linear and angular velocities in the form of twist commands to the `/twist_cmd topic`.
   
-### Usage
+## Usage
 
 1. Clone the project repository
 ```bash
@@ -56,7 +59,7 @@ roslaunch launch/styx.launch
 ```
 4. Run the simulator
 
-### Real world testing
+## Real world testing
 1. Download [training bag](https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/traffic_light_bag_file.zip) that was recorded on the Udacity self-driving car.
 2. Unzip the file
 ```bash
