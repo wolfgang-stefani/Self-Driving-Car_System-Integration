@@ -15,7 +15,7 @@ Please note that the simulator also provides the exact location of traffic light
 current status in `/vehicle/traffic_lights` message.
 '''
 
-LOOKAHEAD_WPS = 60 # we will publish just a fixed number of waypoints currently ahead of the vehicle
+LOOKAHEAD_WPS = 200 # we will publish just a fixed number of waypoints currently ahead of the vehicle
 MAX_DECEL = .5 
 
 
@@ -43,7 +43,7 @@ class WaypointUpdater(object):
         self.loop() # this gives us control about the publishing frequency
     
     def loop(self):
-        rate = rospy.Rate(15) # target 50 Hz
+        rate = rospy.Rate(50) # target 50 Hz
         while not rospy.is_shutdown():
             if self.pose and self.base_waypoints:
                 # Get closest waypoint
