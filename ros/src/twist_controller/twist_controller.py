@@ -1,6 +1,6 @@
 from lowpass import LowPassFilter
-from yaw_controller import *
-from pid import *
+from yaw_controller import YawController
+from pid import PID
 import rospy
 
 GAS_DENSITY = 2.858
@@ -12,9 +12,9 @@ class Controller(object):
         self.yaw_controller = YawController(wheel_base, steer_ratio, 0.1, max_lat_accel, max_steer_angle)
 
         # Determining parameters experimentally
-        kp = 0.5
-        ki = 0.001
-        kd = .8
+        kp = 0.3
+        ki = 0.1
+        kd = 0.
         mn = 0. # Minimum throttle value
         mx = 0.2 # maximum throttle value
         self.throttle_controller = PID(kp, ki, kd, mn, mx)
@@ -26,8 +26,8 @@ class Controller(object):
         self.vehicle_mass = vehicle_mass
         self.fuel_capacity = fuel_capacity
         self.brake_deadband = brake_deadband
-        self.decel_limit = decel_limit
-        self.accel_limit = accel_limit
+        self.decel_limit = decel_limit # comfort parameter
+        self.accel_limit = accel_limit # comfort parameter
         self.wheel_radius = wheel_radius
 
         self.last_time = self.print_time = rospy.get_time()
@@ -37,7 +37,7 @@ class Controller(object):
             self.throttle_controller.reset()
             return 0., 0., 0.
         
-        # Filter the high frequncy portion off
+        # Filter the high frequency velocities off
         current_vel = self.vel_lpf.filt(current_vel)
 
         steering = self.yaw_controller.get_steering(linear_vel,angular_vel,current_vel)
@@ -60,7 +60,7 @@ class Controller(object):
 
         elif throttle < 0.1 and vel_err < 0:
             throttle = 0
-            decel = max(vel_err,self.decel_limit)
+            decel = max(vel_err, self.decel_limit)
             brake = abs(decel) * self.vehicle_mass * self.wheel_radius # Torque per meter
 
         return throttle, brake, steering
