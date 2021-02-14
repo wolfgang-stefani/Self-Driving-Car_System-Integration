@@ -58,6 +58,7 @@ Please use **one** of the two installation options, either native **or** docker 
 * Follow these instructions to install ROS
   * [ROS Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu) if you have Ubuntu 16.04.
   * [ROS Indigo](http://wiki.ros.org/indigo/Installation/Ubuntu) if you have Ubuntu 14.04.
+* To improve performance while using a VM, we recommend downloading the simulator for your host operating system and using this outside of the VM. You will be able to run project code within the VM while running the simulator natively in the host using port forwarding on port 4567. You will find more information on how to set up port forwarding later (see below).
 * Download the [Udacity Simulator](https://github.com/udacity/CarND-Capstone/releases).
 
 ### Docker Installation
@@ -74,7 +75,7 @@ docker run -p 4567:4567 -v $PWD:/capstone -v /tmp/log:/root/.ros/ --rm -it capst
 ```
 
 ### Port Forwarding
-To set up port forwarding, please refer to the "uWebSocketIO Starter Guide" found in the classroom (see Extended Kalman Filter Project lesson).
+Port forwarding is required when running code on VM and simulator on local host system. You will be able to run project code within the VM while running the simulator natively in the host using port forwarding on port 4567. For more information on how to set up port forwarding, see [this file](https://github.com/wolfgang-stefani/Self-Driving-Car_System-Integration/blob/main/readme_data/Port%2BForwarding.pdf).
 
 ## Usage
 
