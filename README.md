@@ -1,6 +1,14 @@
 # Self-Driving-Car_System-Integration
 Using ROS to program a self-driving car
 
+Here you can see an excerpt of the final simulation:
+
+![](./readme_data/simulation.gif)
+
+<p align="left">
+  <src="readme_data/simulation.gif">
+</p>
+
 ## Note
 This project does not include a neural network traffic light detection. The traffic light detection is using simulator ground truth detected.
 
