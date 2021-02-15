@@ -16,7 +16,8 @@ current status in `/vehicle/traffic_lights` message.
 '''
 
 LOOKAHEAD_WPS = 200 # we will publish just a fixed number of waypoints currently ahead of the vehicle
-MAX_DECEL = .5 
+MAX_DECEL = 0.5
+STOP_BEFORE_INDEX = 5
 
 
 class WaypointUpdater(object):
@@ -27,7 +28,8 @@ class WaypointUpdater(object):
         rospy.init_node('waypoint_updater')
         
         # Member variables
-        self.base_lane = None
+        self.base_waypoints = None
+        self.prev_state = self.now_state = -1
         self.pose = None
         self.stopline_wp_idx = -1
         self.waypoints_2d = None
@@ -43,9 +45,9 @@ class WaypointUpdater(object):
         self.loop() # this gives us control about the publishing frequency
     
     def loop(self):
-        rate = rospy.Rate(50) # target 50 Hz
+        rate = rospy.Rate(20)
         while not rospy.is_shutdown():
-            if self.pose and self.base_lane:
+            if self.pose and self.base_waypoints:
                 self.publish_waypoints()
             rate.sleep()
             
@@ -79,12 +81,20 @@ class WaypointUpdater(object):
         
         closest_idx = self.get_closest_waypoint_idx()
         farthest_idx = closest_idx + LOOKAHEAD_WPS
-        base_waypoints = self.base_lane.waypoints[closest_idx:farthest_idx]
+        temp_base_waypoints = self.base_waypoints.waypoints[closest_idx:farthest_idx]
 
-        if self.stopline_wp_idx == -1 or (self.stopline_wp_idx >= farthest_idx):
-            lane.waypoints = base_waypoints
+        if self.stopline_wp_idx == -1 or self.stopline_wp_idx >= farthest_idx:
+            lane.waypoints = temp_base_waypoints
+            self.now_state = 0 # NEW
+            if self.now_state != self.prev_state: # NEW
+                rospy.logwarn('Waypoint_updater: Not red, using previous waypoints') # NEW
+                self.prev_state = self.now_state # NEW
         else:
-            lane.waypoints = self.decelerate_waypoints(base_waypoints, closest_idx)
+            lane.waypoints = self.decelerate_waypoints(temp_base_waypoints, closest_idx)
+            self.now_state = 1 # NEW
+            if self.now_state != self.prev_state: # NEW
+                rospy.logwarn('Waypoint_updater: Decelerating Waypoints created') # NEW
+                self.prev_state = self.now_state # NEW
 
         return lane
 
@@ -94,7 +104,7 @@ class WaypointUpdater(object):
             p = Waypoint()
             p.pose = wp.pose
             
-            stop_idx = max(self.stopline_wp_idx - closest_idx - 2 , 0)
+            stop_idx = max(self.stopline_wp_idx - closest_idx - STOP_BEFORE_INDEX , 0)
             dist = self.distance(waypoints, i, stop_idx)
             vel = math.sqrt(2 * MAX_DECEL * dist)
 
@@ -111,14 +121,17 @@ class WaypointUpdater(object):
         self.pose = msg
 
     def waypoints_cb(self, waypoints):
-        self.base_lane = waypoints
+        self.base_waypoints = waypoints
         if not self.waypoints_2d:
             self.waypoints_2d = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoint_tree = KDTree(self.waypoints_2d)
 
     def traffic_cb(self, msg):
         # Callback for /traffic_waypoint message
-        self.stopline_wp_idx = msg.data
+        #self.stopline_wp_idx = msg.data
+        if self.stopline_wp_idx != msg.data: # new
+            rospy.logwarn('Receiving new stopline_idx: {}, older Data: {}'.format(msg.data,self.stopline_wp_idx)) # new
+            self.stopline_wp_idx = msg.data # new
 
     def obstacle_cb(self, msg):
         pass
