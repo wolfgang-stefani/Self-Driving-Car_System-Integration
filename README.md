@@ -16,6 +16,8 @@ This project does not include a neural network traffic light detection. The traf
 The following is a system architecture diagram showing the ROS nodes and topics used in the project. They are described briefly in the Code Structure section below.
 ![](/readme_data/ros-graph.png)
 
+Twist commands that the DBW Node subscribes to are basically linear and angular accelerations.
+
 ## Code Structure
 The code is contained entirely within the /ros/src/ directory. Within this directory, you will find the following ROS packages:
 
@@ -106,22 +108,6 @@ roslaunch launch/styx.launch
 ```
 4. Run the simulator
 
-## Real world testing
-1. Download [training bag](https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/traffic_light_bag_file.zip) that was recorded on the Udacity self-driving car.
-2. Unzip the file
-```bash
-unzip traffic_light_bag_file.zip
-```
-3. Play the bag file
-```bash
-rosbag play -l traffic_light_bag_file/traffic_light_training.bag
-```
-4. Launch your project in site mode
-```bash
-cd CarND-Capstone/ros
-roslaunch launch/site.launch
-```
-5. Confirm that traffic light detection works on real life images
 
 ## Other library/driver information
 Outside of `requirements.txt`, here is information on other driver/library versions used in the simulator and Carla:
